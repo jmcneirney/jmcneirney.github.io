@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        window.onload = () => {
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    message: "Howdy!"
+                }
+            });
+        }
+    </script>
+    <style>
+      body {
+          background-color: linen; 
+      }
+      
+      pre {
+          background-color: rgb(228,228,228);
+          border-style:     solid;
+          font-family:      monospace;
+      }
+
+      p {
+          font: 15px arial, sans-serif;
+      }
+
+      #body {
+             /*   top  right bot left */
+          margin: 25px 90px 75px 100px;
+          width:  50%;
+          padding: 123px;
+      } 
+
+      .comparison1 {
+          color: red;
+      }
+      .comparison2 {
+
+      }
+      .comparison3 {
+
+      }
+      .comparison4 {
+
+      }
+      .comparison5 {
+
+      }
+      .comparison6 {
+
+      }
+      .include {
+          color: rgb(0, 128, 255);
+      }
+      .bif { /* built_in_functions */
+          color: rgb(255,93,0);
+      }
+      .decl { /* variable declarations */
+          color: rgb(9, 91, 234);
+      }
+      .lang_title {
+          color: rgb(24,84,24);
+          font-style: italic;
+      }
+      .cond {
+          color: black;
+      }
+    </style>
+  </head>
+  <body>
+  <div id='body'>
+    <div id="app">
+        {{ message }}
+    </div>
+<!--
+     Do something where mousing over a code element in either of the files highlites 
+     the corresponding code in the other file(s)
+-->
+    <p>
+       Names scores<br />
+       Problem 22<br />
+       <br />
+       Using <a href='https://projecteuler.net/project/resources/p022_names.txt'>names.txt</a>, a 46K text file containing over five-thousand first names, <br />
+       begin by sorting it into alphabetical order. Then working out the alphabetical value for each name, multiply this value <br />
+       by its alphabetical position in the list to obtain a name score.<br /> <br />
+       For example, when the list is sorted into alphabetical order, COLIN, which is worth 3 + 15 + 12 + 9 + 14 = 53, is the 938th
+       <br />
+       name in the list. So, COLIN would obtain a score of 938 × 53 = 49714.<br /> <br />
+       What is the total of all the name scores in the file?<br />
+      </p>
+  
+    <p class=lang_title>Perl</p>
+    <pre>
+      <code>
+         <span class='include'>
+         use v5.26;
+         use strict;
+         use warnings;
+         use Readonly;
+         </span>
+         Readonly <span='decl'>my</span> $ALPHABETIC_BASE => 96;
+         
+         <span class=bif>open</span>( my $NAMES, '<', './p022_names.txt' ) or <span class=bif>croak</span> "Unable to read file: " . $!;
+         
+         <span class='decl'>my</span> %names;
+         <span class='decl'>my</span> $position = 1;
+         <span class='bif'>foreach</span> <span class='decl'>my</span> $name ( <span class='bif'>sort</span> <span class='comparison1 bif'>split</span>(',', <$NAMES> ) ) {
+             $name =~ s/"//g;
+             <span class='decl'>my</span> $val;
+             <span class=bif>map</span> { $val += <span class=bif>ord</span>($_) - $ALPHABETIC_BASE } <span class='bif'>split</span>('', <span class='bif'>lc</span>($name));
+             $names{$name} = $val * $position;
+             $position++;
+         }
+         
+         <span class='decl'>my</span> $total;
+         <span class='bif'>foreach</span> <span class='decl'>my</span> $name_val ( <span class='bif'>values</span> %names ) {
+             $total += $name_val;
+         }
+         <span class='bif'>say</span> $total;
+
+      </code>
+    </pre>
+
+    <p class=lang_title>Raku</p>
+    <pre>
+      <code>
+      # p022_names.txt -> "MARY","PATRICIA","LINDA","BARBARA","ELIZABETH","JENNIFER","MARIA","SUSAN",...
+      my @sums;
+      for '../p022_names.txt'.IO.slurp.<span class='comparison1'>split(',')</span>.sort.pairs -> $pair {
+          @sums.push(($pair.key + 1) * $pair.value.lc.comb(/\w/).map( *.ord -96 ).sum );
+      }
+      
+      say [+] @sums
+      
+      </code>
+    </pre>
+  
+  <!-- get rid of the lists - doesn't really make much sense -->
+    <ol>
+      <li> '../p022_names.txt'.IO.slurp </li>
+      <li> split(',') </li>
+        <ul>
+          <li> splits <a href="https://github.com/jmcneirney/euler-project/blob/problem22/p22/p022_names.txt">name list</a> into individual names.</li>
+        </ul>
+      <li> sort.pairs </li>
+        <ul>
+          <li> sorts the split list of names and returns a list of pairs where the
+                 first element of each pair is its index position in the list and the second element of the pair is the name.
+          </li>
+        </ul>
+      <li> pairs -> $pair { } </li>
+        <ul>
+          <li> takes each element of the list of pairs and assigns it to a variable $pair</li>
+        </ul>
+    </ol>
+    <p class=lang_title>Haskell</p>
+    <pre>
+      <code>
+        <span class='include'>
+        import System.IO        -- openFile & hGetContents
+        import Data.List.Split  -- splitOn
+        import Data.List        -- sort
+        import Data.Char        -- ord
+        </span>
+        
+        main = do
+            handle <- openFile "../p022_names.txt" ReadMode
+            contents <- hGetContents handle
+        
+            <span class='decl'>let</span> names = <span class='comparison1'>splitOn(",")</span> contents
+        
+            <span class='decl'>let</span> char_offset = 64;
+        
+            -- remove \"
+            <span class='decl'>let</span> names_list = <span class='bif'>map</span>( filter( \s -> s `elem` ['A'..'Z'] ) ) names
+        
+            -- get ordinal value and subtract 64
+            <span class='decl'>let</span> ord_list = <span class='bif'>map</span> <span class='bif'>sum</span> $ map ( map( \c -> ord c - char_offset ) ) $ sort names_list
+        
+            -- list of tuples
+            <span class='decl'>let</span> zipt = <span class='bif'>zip</span>[1..(<span class='bif'>length</span> ord_list)] ord_list
+        
+            <span class='decl'>let</span> total = <span class='bif'>sum</span> $ <span class='bif'>map</span> ( \(x,y) -> (x * y) ) zipt
+        
+            putStr $ (show total) ++ "\n"
+        
+            hClose handle
+      </code>
+    </pre>
+  </div>
+  </body>
+</html>
