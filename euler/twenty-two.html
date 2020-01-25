@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://code.jquery.com/jquery-git.min.js"></script>
     <script>
         window.onload = () => {
             var app = new Vue({
@@ -10,7 +13,23 @@
                     message: "Howdy!"
                 }
             });
+ 
+            var app2 = new Vue({
+                el: '#app-list',
+                data: {
+                  solutions: [
+                    { text: 'Perl', ref: '' },
+                    { text: 'Raku', ref: '' },
+                    { text: 'Haskell', ref: '' }
+                  ]
+                }
+            });
+
+            $('comparison1').on('mouseover', () => {
+                console.log("Hideeho" + $(this) );
+            });
         }
+        
     </script>
     <style>
       body {
@@ -27,13 +46,24 @@
           font: 15px arial, sans-serif;
       }
 
+      .row:after {
+        content: "";
+        display: table;
+        clear: both;
+      }
       #body {
-             /*   top  right bot left */
-          margin: 25px 90px 75px 100px;
-          width:  50%;
-          padding: 123px;
+          width:  85%;
+          float: left
       } 
-
+      #side_bar {
+          background-color: rgb(200,200,200);
+          float: left;
+          width: 10%;
+      }
+      .column {
+             /*   top  right bot left */
+          margin: 25px 10px 75px 10px;
+      }
       .comparison1 {
           color: red;
       }
@@ -71,7 +101,15 @@
     </style>
   </head>
   <body>
-  <div id='body'>
+  <div class='row'>
+  <div id='side_bar' class='column'>
+   <ul id='app-list'>
+     <li v-for='solution in solutions'>
+       {{ solution.text }}
+     </li>
+   </ul> 
+  </div>
+  <div id='body' class='column'>
     <div id="app">
         {{ message }}
     </div>
@@ -138,24 +176,6 @@
       </code>
     </pre>
   
-  <!-- get rid of the lists - doesn't really make much sense -->
-    <ol>
-      <li> '../p022_names.txt'.IO.slurp </li>
-      <li> split(',') </li>
-        <ul>
-          <li> splits <a href="https://github.com/jmcneirney/euler-project/blob/problem22/p22/p022_names.txt">name list</a> into individual names.</li>
-        </ul>
-      <li> sort.pairs </li>
-        <ul>
-          <li> sorts the split list of names and returns a list of pairs where the
-                 first element of each pair is its index position in the list and the second element of the pair is the name.
-          </li>
-        </ul>
-      <li> pairs -> $pair { } </li>
-        <ul>
-          <li> takes each element of the list of pairs and assigns it to a variable $pair</li>
-        </ul>
-    </ol>
     <p class=lang_title>Haskell</p>
     <pre>
       <code>
@@ -191,5 +211,6 @@
       </code>
     </pre>
   </div>
+  </div> <!-- end row -->
   </body>
 </html>

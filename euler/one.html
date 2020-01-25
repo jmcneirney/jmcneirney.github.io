@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://code.jquery.com/jquery-git.min.js"></script>
+    <script>
+        window.onload = () => {
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    message: "Howdy!"
+                }
+            });
+ 
+            var app2 = new Vue({
+                el: '#app-list',
+                data: {
+                  solutions: [
+                    { text: 'Perl', ref: '' },
+                    { text: 'Raku', ref: '' },
+                    { text: 'Haskell', ref: '' }
+                  ]
+                }
+            });
+
+            $('comparison1').on('mouseover', () => {
+                console.log("Hideeho" + $(this) );
+            });
+        }
+        
+    </script>
+    <style>
+      body {
+          background-color: linen; 
+      }
+      
+      pre {
+          background-color: rgb(228,228,228);
+          border-style:     solid;
+          font-family:      monospace;
+      }
+
+      p {
+          font: 15px arial, sans-serif;
+      }
+
+      .row:after {
+        content: "";
+        display: table;
+        clear: both;
+      }
+      #body {
+          width:  85%;
+          float: left
+      } 
+      #side_bar {
+          background-color: rgb(200,200,200);
+          float: left;
+          width: 10%;
+      }
+      .column {
+             /*   top  right bot left */
+          margin: 25px 10px 75px 10px;
+      }
+      .comparison1 {
+          color: red;
+      }
+      .comparison2 {
+
+      }
+      .comparison3 {
+
+      }
+      .comparison4 {
+
+      }
+      .comparison5 {
+
+      }
+      .comparison6 {
+
+      }
+      .include {
+          color: rgb(0, 128, 255);
+      }
+      .bif { /* built_in_functions */
+          color: rgb(255,93,0);
+      }
+      .decl { /* variable declarations */
+          color: rgb(9, 91, 234);
+      }
+      .lang_title {
+          color: rgb(24,84,24);
+          font-style: italic;
+      }
+      .cond {
+          color: black;
+      }
+    </style>
+  </head>
+  <body>
+  <div class='row'>
+  <div id='side_bar' class='column'>
+   <ul id='app-list'>
+     <li v-for='solution in solutions'>
+       {{ solution.text }}
+     </li>
+   </ul> 
+  </div>
+  <div id='body' class='column'>
+    <div id="app">
+        {{ message }}
+    </div>
+    <p>
+      </p>
+  
+    <p class=lang_title>Perl</p>
+    <pre>
+      <code>
+         <span class='include'>
+         </span>
+      </code>
+    </pre>
+
+    <p class=lang_title>Raku</p>
+    <pre>
+      <code>
+      </code>
+    </pre>
+  
+    <p class=lang_title>Haskell</p>
+    <pre>
+      <code>
+        <span class='include'>
+        </span>
+        
+      </code>
+    </pre>
+  </div>
+  </div> <!-- end row -->
+  </body>
+</html>
